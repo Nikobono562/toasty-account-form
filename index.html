@@ -1,171 +1,215 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Toasty Account Research - Interactive + Printable</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      line-height: 1.5;
-    }
-    h1, h2, h3 {
-      color: #333;
-    }
-    input, textarea, select {
-      width: 100%;
-      padding: 5px;
-      margin-top: 4px;
-      margin-bottom: 10px;
-    }
-    .section {
-      margin-bottom: 30px;
-    }
-    .print-button {
-      margin: 20px 0;
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-    .print-button:hover {
-      background-color: #0056b3;
-    }
-    .location-group {
-      border: 1px solid #ccc;
-      padding: 15px;
-      margin-bottom: 15px;
-    }
-    .remove-button {
-      background-color: #dc3545;
-      color: white;
-      border: none;
-      padding: 5px 10px;
-      cursor: pointer;
-      border-radius: 3px;
-      float: right;
-    }
-    .remove-button:hover {
-      background-color: #c82333;
-    }
-    @media print {
-      .print-button, .add-location {
-        display: none;
-      }
-      input, textarea, select, .remove-button {
-        border: none;
-        background: none;
-      }
-    }
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.6">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
   </style>
 </head>
 <body>
-  <button class="print-button" onclick="window.print()">🖨️ Save or Print as PDF</button>
-
-  <div class="section">
-    <h2>Toasty Account Research</h2>
-    <label>Target Account:</label><input type="text" />
-    <label>SFDC Link:</label><input type="text" />
-    <label>Date Researched:</label><input type="date" />
-    <label>Customer Success Manager:</label><input type="text" />
-    <label>Account Executive:</label><input type="text" />
-    <label>Growth Account Executive:</label><input type="text" />
-  </div>
-
-  <div class="section">
-    <h3>1. Account & Parent/Child Overview</h3>
-    <label>Parent Account:</label><input type="text" />
-    <label>Parent Website:</label><input type="text" />
-    <label>Child Account(s):</label><textarea rows="3"></textarea>
-    <label>Account Type / Concept:</label><input type="text" />
-    <label>Estimated Total Locations:</label><input type="number" />
-  </div>
-
-  <div class="section">
-    <h3>2. Key Contacts (POCs)</h3>
-    <label>Primary Decision Maker 1 - Name:</label><input type="text" />
-    <label>Title:</label><input type="text" />
-    <label>Email:</label><input type="email" />
-    <label>Primary Decision Maker 2 - Name:</label><input type="text" />
-    <label>Title:</label><input type="text" />
-    <label>Email:</label><input type="email" />
-    <label>Other Noteworthy Contacts:</label><textarea rows="3"></textarea>
-  </div>
-
-  <div class="section">
-    <h3>3. Current Toast Setup & Pain Points</h3>
-    <div id="locations"></div>
-    <button type="button" class="print-button add-location" onclick="addLocation()">➕ Add Location</button>
-    <label>General Pain Points Observed:</label><textarea rows="4"></textarea>
-    <label>📊 Upload or Paste Chart Summary:</label><input type="file" accept="image/*" onchange="previewImage(event)">
-    <div id="chart-preview" style="margin-top:10px;"></div>
-  </div>
-
-  <div class="section">
-    <h3>4. Toast Expansion Opportunity</h3>
-    <label>Why More Toast?</label><textarea rows="4"></textarea>
-    <label>Recent News / Insights:</label><textarea rows="4"></textarea>
-    <label>Goals with this Account:</label><textarea rows="4"></textarea>
-  </div>
-
-  <div class="section">
-    <h3>5. Outreach & Next Steps</h3>
-    <label>Recommended Outreach Channel:</label><input type="text" />
-    <label>Personalization Angle:</label><textarea rows="2"></textarea>
-    <label>Targeted Discovery Questions:</label><textarea rows="3"></textarea>
-    <label>Outreach Status:</label>
-    <select>
-      <option>Initial outreach completed</option>
-      <option>Kickoff call scheduled</option>
-      <option>Kickoff call completed</option>
-      <option>Regular meeting cadence scheduled</option>
-      <option>No regular cadence</option>
-    </select>
-    <label>Current Action Items:</label><textarea rows="4"></textarea>
-  </div>
-
-  <script>
-    const modules = [
-      "Core POS", "Mobile Order & Pay", "Online Ordering Website", "Branded App", "Loyalty",
-      "Email Marketing", "SMS Marketing", "Gift Cards", "Catering & Events", "xtraCHEF",
-      "Inventory Management", "Payroll", "Sling", "Tables", "Benchmarking", "Handhelds",
-      "XDS", "MLM", "DoorDash Integration", "Uber Eats Integration", "Grubhub Integration",
-      "TOS (Online Ordering)"
-    ];
-
-    function addLocation() {
-      const container = document.getElementById("locations");
-      const div = document.createElement("div");
-      div.className = "location-group";
-
-      const html = `
-        <button class="remove-button" onclick="this.parentElement.remove()">Remove</button>
-        <label>Location Name:</label><input type="text" />
-        <label>Modules:</label><div style="display:flex; flex-wrap:wrap; gap:10px;">
-          ${modules.map(m => `<label style="flex: 1 1 30%;"><input type="checkbox" /> ${m}</label>`).join('')}
-        </div>
-        <label>Pain Points/Notes:</label><textarea rows="3"></textarea>
-      `;
-
-      div.innerHTML = html;
-      container.appendChild(div);
-    }
-
-    function previewImage(event) {
-      const preview = document.getElementById("chart-preview");
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          preview.innerHTML = `<img src="${e.target.result}" style="max-width:100%; margin-top:10px;" />`;
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-  </script>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;Toasty Account Research - Interactive + Printable&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background-color: #fff8f0;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin: 40px auto;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>max-width: 900px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: #2e2e2e;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>h1, h2, h3 {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: #ef6c00;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>label {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-weight: 600;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>input, textarea, select {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin-top: 4px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 5px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border: 1px solid #ccc;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-size: 14px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>textarea {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>resize: vertical;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.section {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 40px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>box-shadow: 0 2px 8px rgba(0,0,0,0.05);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.print-button {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin: 20px 0;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 10px 20px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-size: 16px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background-color: #ef6c00;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: white;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border: none;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 5px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.print-button:hover {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background-color: #cc5a00;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.location-group {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border: 1px solid #ddd;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background: #fefefe;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.remove-button {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background-color: #dc3545;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: white;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border: none;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 6px 12px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 4px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>float: right;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.remove-button:hover {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background-color: #b02a37;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>@media print {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.print-button, .add-location, #remove-image {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>display: none;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>input, textarea, select, .remove-button {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border: none;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>background: none;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;button class="print-button" onclick="window.print()"&gt;🖨️ Save or Print as PDF&lt;/button&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="section"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Toasty Account Research&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Target Account:&lt;/label&gt;&lt;input type="text" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;SFDC Link:&lt;/label&gt;&lt;input type="text" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Date Researched:&lt;/label&gt;&lt;input type="date" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Customer Success Manager:&lt;/label&gt;&lt;input type="text" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Account Executive:&lt;/label&gt;&lt;input type="text" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Growth Account Executive:&lt;/label&gt;&lt;input type="text" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="section"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h3&gt;1. Account &amp; Parent/Child Overview&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Parent Account:&lt;/label&gt;&lt;input type="text" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Parent Website:&lt;/label&gt;&lt;input type="text" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Child Account(s):&lt;/label&gt;&lt;textarea rows="3"&gt;&lt;/textarea&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Account Type / Concept:&lt;/label&gt;&lt;input type="text" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Estimated Total Locations:&lt;/label&gt;&lt;input type="number" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="section"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h3&gt;2. Key Contacts (POCs)&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Primary Decision Maker 1 - Name:&lt;/label&gt;&lt;input type="text" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Title:&lt;/label&gt;&lt;input type="text" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Email:&lt;/label&gt;&lt;input type="email" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Primary Decision Maker 2 - Name:&lt;/label&gt;&lt;input type="text" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Title:&lt;/label&gt;&lt;input type="text" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Email:&lt;/label&gt;&lt;input type="email" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Other Noteworthy Contacts:&lt;/label&gt;&lt;textarea rows="3"&gt;&lt;/textarea&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="section"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h3&gt;3. Current Toast Setup &amp; Pain Points&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="locations"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button type="button" class="print-button add-location" onclick="addLocation()"&gt;➕ Add Location&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;General Pain Points Observed:&lt;/label&gt;&lt;textarea rows="4"&gt;&lt;/textarea&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;📊 Upload or Paste Chart Summary:&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;input type="file" accept="image/*" onchange="previewImage(event)" id="chart-upload"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="chart-preview" style="margin-top:10px;"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button type="button" class="print-button" onclick="removeImage()" id="remove-image" style="display:none;"&gt;❌ Remove Image&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="section"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h3&gt;4. Toast Expansion Opportunity&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Why More Toast?&lt;/label&gt;&lt;textarea rows="4"&gt;&lt;/textarea&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Recent News / Insights:&lt;/label&gt;&lt;textarea rows="4"&gt;&lt;/textarea&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Goals with this Account:&lt;/label&gt;&lt;textarea rows="4"&gt;&lt;/textarea&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="section"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h3&gt;5. Outreach &amp; Next Steps&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Recommended Outreach Channel:&lt;/label&gt;&lt;input type="text" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Personalization Angle:&lt;/label&gt;&lt;textarea rows="2"&gt;&lt;/textarea&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Targeted Discovery Questions:&lt;/label&gt;&lt;textarea rows="3"&gt;&lt;/textarea&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Outreach Status:&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;select&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;option&gt;Initial outreach completed&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;option&gt;Kickoff call scheduled&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;option&gt;Kickoff call completed&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;option&gt;Regular meeting cadence scheduled&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;option&gt;No regular cadence&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/select&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Current Action Items:&lt;/label&gt;&lt;textarea rows="4"&gt;&lt;/textarea&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const modules = [</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"Core POS", "Mobile Order &amp; Pay", "Online Ordering Website", "Branded App", "Loyalty",</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"Email Marketing", "SMS Marketing", "Gift Cards", "Catering &amp; Events", "xtraCHEF",</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"Inventory Management", "Payroll", "Sling", "Tables", "Benchmarking", "Handhelds",</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"XDS", "MLM", "DoorDash Integration", "Uber Eats Integration", "Grubhub Integration",</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"TOS (Online Ordering)"</p>
+<p class="p1"><span class="Apple-converted-space">    </span>];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function addLocation() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const container = document.getElementById("locations");</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const div = document.createElement("div");</p>
+<p class="p1"><span class="Apple-converted-space">      </span>div.className = "location-group";</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>const html = `</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="remove-button" onclick="this.parentElement.remove()"&gt;Remove&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;label&gt;Location Name:&lt;/label&gt;&lt;input type="text" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;label&gt;Modules:&lt;/label&gt;&lt;div style="display:flex; flex-wrap:wrap; gap:10px;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>${modules.map(m =&gt; `&lt;label style="flex: 1 1 30%;"&gt;&lt;input type="checkbox" /&gt; ${m}&lt;/label&gt;`).join('')}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;label&gt;Pain Points/Notes:&lt;/label&gt;&lt;textarea rows="3"&gt;&lt;/textarea&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>`;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>div.innerHTML = html;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>container.appendChild(div);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function previewImage(event) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const preview = document.getElementById("chart-preview");</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const file = event.target.files[0];</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const removeBtn = document.getElementById("remove-image");</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (file) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const reader = new FileReader();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>reader.onload = function(e) {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>preview.innerHTML = `&lt;img src="${e.target.result}" style="max-width:100%; margin-top:10px;" /&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>removeBtn.style.display = "inline-block";</p>
+<p class="p1"><span class="Apple-converted-space">        </span>};</p>
+<p class="p1"><span class="Apple-converted-space">        </span>reader.readAsDataURL(file);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function removeImage() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>document.getElementById("chart-upload").value = "";</p>
+<p class="p1"><span class="Apple-converted-space">      </span>document.getElementById("chart-preview").innerHTML = "";</p>
+<p class="p1"><span class="Apple-converted-space">      </span>document.getElementById("remove-image").style.display = "none";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
 </body>
 </html>
